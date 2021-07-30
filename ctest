@@ -1,0 +1,319 @@
+/*************************************************************************
+	> File Name: ctest.c
+	> Author: 
+	> Mail: 
+	> Created Time: 2021年07月29日 星期四 15时38分53秒
+ ************************************************************************/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stddef.h>
+#include <ctype.h>
+
+
+
+int check_led_num(char an);
+int check_led_feq(char an);
+int check_led_color(char an);
+
+
+int main()
+{
+    // please write your code here
+    char buffer[400];
+    char ch;
+    int i = 0;
+    int len = 0;
+    int ErrorFlag = 0;
+    int  SignQue[10]={-1};
+    int  sj=1;
+    int  templen = 0;
+    while ((ch=fgetc(stdin))!= '\n') //获取文件中的字符
+    {  
+       if(ch != ' ')
+        {
+          buffer[i] = ch;
+          i++;
+          //记录逗号出现的位置
+          if(ch == ',')
+          {
+          	SignQue[sj] = i;
+          	sj++;
+          }
+        } 
+    }
+    //记录回车出现的位置，视为逗号分割
+    buffer[i] = ch;
+    SignQue[sj] = i;
+
+	//异常处理，超过10个灯
+    len = i+1;
+    if(((len/4)>10))
+    {
+        printf("-1\n");
+        return -1;
+    }    
+    
+
+    for(i=0;i<sj;i++)
+    {
+    	int end   = SignQue[sj+1];
+    	int begin = SignQue[sj];
+    	templen = end - begin - 1;
+    	if(templen == 3)
+    	{
+    		if((check_led_color(buffer[end-1])<0)||\
+                (check_led_feq(buffer[end-2])<0)||\
+                (check_led_num(buffer[end-3])<0))
+    		{
+    			ErrorFlag = -1;
+    			break;
+    		}
+    	}
+    	elseif(templen == 4)
+    	{
+            if((check_led_color(buffer[end-1])<0)||\
+                (check_led_feq(buffer[end-2])<0)||\
+                (((buffer[end-3])==0)&&(buffer[start+1]==1)))
+            {
+                ErrorFlag = -1;
+                break;
+            }
+
+        }
+    	elseif(templen == 7)
+    	{
+             if((check_led_color(buffer[end-1])<0)||\
+                (check_led_feq(buffer[end-2])<0)||\
+                (((buffer[end-3])==0)&&(buffer[start+1]==1)))
+            {
+                ErrorFlag = -1;
+                break;
+            }
+        }
+    	elseif(templen == 8)
+    	{}
+    	else
+    	{
+    		printf("-1\n");
+        	return -1;
+    	}
+
+
+
+    }
+
+
+
+
+    //校验输入内容没错，进行格式化报文输出
+    printf("%04d",(len/4));
+    for(i=0; i<len;i++)    
+    {
+        printf("%04d",buffer[i]-  '0');
+        i++;
+        printf("%02d",buffer[i]-'0');
+        i++;
+        printf("%02d",buffer[i]-'0');
+        i++;
+    }    
+    
+    printf("\n");
+
+
+    for(i=0;i<len;i++)
+    {
+        printf("%d %d %d ",buffer[i]-'0',buffer[i++]-'0',buffer[i++]-'0');
+        i++;
+    }
+    printf("\n");
+
+
+    
+    return 0;
+}
+
+int check_led_num(char an)
+{
+    nt n = an -'0';
+    if((n>=1)&&(n<=10))
+        return 0;
+    else
+        return -1;
+}
+int check_led_feq(char an)
+{
+    nt n = an -'0';
+    if((n==1)||(n==2)||(n==3))
+        return 0;
+    else
+        return -1;
+}
+int check_led_color(char an)
+{
+	int n = an -'0';
+	if((n==0)||(n==1)||(n==2)||(n==4))
+		return 0;
+	else
+		return -1;
+}/*************************************************************************
+	> File Name: ctest.c
+	> Author: 
+	> Mail: 
+	> Created Time: 2021年07月29日 星期四 15时38分53秒
+ ************************************************************************/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stddef.h>
+#include <ctype.h>
+
+
+
+int check_led_num(char an);
+int check_led_feq(char an);
+int check_led_color(char an);
+
+
+int main()
+{
+    // please write your code here
+    char buffer[400];
+    char ch;
+    int i = 0;
+    int len = 0;
+    int ErrorFlag = 0;
+    int  SignQue[10]={-1};
+    int  sj=1;
+    int  templen = 0;
+    while ((ch=fgetc(stdin))!= '\n') //获取文件中的字符
+    {  
+       if(ch != ' ')
+        {
+          buffer[i] = ch;
+          i++;
+          //记录逗号出现的位置
+          if(ch == ',')
+          {
+          	SignQue[sj] = i;
+          	sj++;
+          }
+        } 
+    }
+    //记录回车出现的位置，视为逗号分割
+    buffer[i] = ch;
+    SignQue[sj] = i;
+
+	//异常处理，超过10个灯
+    len = i+1;
+    if(((len/4)>10))
+    {
+        printf("-1\n");
+        return -1;
+    }    
+    
+
+    for(i=0;i<sj;i++)
+    {
+    	int end   = SignQue[sj+1];
+    	int begin = SignQue[sj];
+    	templen = end - begin - 1;
+    	if(templen == 3)
+    	{
+    		if((check_led_color(buffer[end-1])<0)||\
+                (check_led_feq(buffer[end-2])<0)||\
+                (check_led_num(buffer[end-3])<0))
+    		{
+    			ErrorFlag = -1;
+    			break;
+    		}
+    	}
+    	elseif(templen == 4)
+    	{
+            if((check_led_color(buffer[end-1])<0)||\
+                (check_led_feq(buffer[end-2])<0)||\
+                (((buffer[end-3])==0)&&(buffer[start+1]==1)))
+            {
+                ErrorFlag = -1;
+                break;
+            }
+
+        }
+    	elseif(templen == 7)
+    	{
+             if((check_led_color(buffer[end-1])<0)||\
+                (check_led_feq(buffer[end-2])<0)||\
+                (((buffer[end-3])==0)&&(buffer[start+1]==1)))
+            {
+                ErrorFlag = -1;
+                break;
+            }
+        }
+    	elseif(templen == 8)
+    	{}
+    	else
+    	{
+    		printf("-1\n");
+        	return -1;
+    	}
+
+
+
+    }
+
+
+
+
+    //校验输入内容没错，进行格式化报文输出
+    printf("%04d",(len/4));
+    for(i=0; i<len;i++)    
+    {
+        printf("%04d",buffer[i]-  '0');
+        i++;
+        printf("%02d",buffer[i]-'0');
+        i++;
+        printf("%02d",buffer[i]-'0');
+        i++;
+    }    
+    
+    printf("\n");
+
+
+    for(i=0;i<len;i++)
+    {
+        printf("%d %d %d ",buffer[i]-'0',buffer[i++]-'0',buffer[i++]-'0');
+        i++;
+    }
+    printf("\n");
+
+
+    
+    return 0;
+}
+
+int check_led_num(char an)
+{
+    nt n = an -'0';
+    if((n>=1)&&(n<=10))
+        return 0;
+    else
+        return -1;
+}
+int check_led_feq(char an)
+{
+    nt n = an -'0';
+    if((n==1)||(n==2)||(n==3))
+        return 0;
+    else
+        return -1;
+}
+int check_led_color(char an)
+{
+	int n = an -'0';
+	if((n==0)||(n==1)||(n==2)||(n==4))
+		return 0;
+	else
+		return -1;
+}
